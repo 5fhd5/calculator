@@ -1,4 +1,4 @@
-!\[Java CI](https://github.com/5fhd5/calculator/actions/workflows/ci-calculator.yml/badge.svg?branch=main)
+![Java CI](https://github.com/5fhd5/calculator/actions/workflows/ci-calculator.yml/badge.svg?branch=main)
 
 \# CLI Calculator
 
