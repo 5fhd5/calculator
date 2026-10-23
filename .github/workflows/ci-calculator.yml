@@ -1,4 +1,4 @@
-name: Java CI - Calculator
+name: Java CI with Maven and Docker
 
 on:
   push:
@@ -7,26 +7,25 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        java-version: [ '17', '21' ]
-
+    
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Build and Test with Maven
+      run: mvn -B clean test
 
-      - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ matrix.java-version }}
-          distribution: 'temurin'
-          cache: 'maven'
-
-      - name: Compile Source Code
-        run: mvn -B clean compile
-
-      - name: Run Unit Tests
-        run: mvn -B test
+    # --- 以下为 Lab 6 新增的 Docker 构建步骤 ---
+    - name: Build Docker Image
+      run: docker build -t calculator:ci .
+      
+    - name: Test Docker Container
+      run: docker run --rm calculator:ci 2 + 2
